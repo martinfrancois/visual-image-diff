@@ -1,0 +1,6 @@
+venv
+images-reference/*
+images-new/*
+images-diff/*
+*.iml
+.idea
