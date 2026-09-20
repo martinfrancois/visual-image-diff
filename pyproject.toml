@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "visual-image-diff"
+version = "0.1.0"
+description = "Compare two folders of images and write a black-on-white diff image for every pair that differs."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = ["opencv-python-headless==4.11.0.86"]
+
+[project.scripts]
+visual-image-diff = "app:main"
+
+[tool.setuptools]
+py-modules = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["."]
+python_files = ["test_*.py"]
