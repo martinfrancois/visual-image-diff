@@ -88,8 +88,8 @@ in a temporary folder and check the diff output.
 - Images are compared at identical size and position. A shift of one pixel
   marks the whole shifted area as different.
 - Color images are diffed per channel, then the difference is converted to
-  grayscale before thresholding, so a change that is invisible in gray
-  can be missed in relaxed mode.
+  grayscale before thresholding. A change of one level in the red or blue
+  channel alone rounds to zero gray and is missed even in strict mode.
 - Alpha channels are ignored: images are loaded as three-channel BGR.
 - Subfolders are not searched.
 
