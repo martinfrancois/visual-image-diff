@@ -89,7 +89,7 @@ def process_folders(folder1, folder2, output_folder, threshold_value=30, mode="s
         diff_path = os.path.join(output_folder, f"diff_{image_name}")
         compare_images(image_path1, image_path2, diff_path, threshold_value, mode)
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="Compare two image folders and generate binary diff images. "
                     "The diff image has a white background with differences in black. "
@@ -105,3 +105,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     process_folders(args.folder1, args.folder2, args.output_folder, args.threshold, args.mode)
+
+
+if __name__ == "__main__":
+    main()

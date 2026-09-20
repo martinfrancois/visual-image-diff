@@ -1,6 +1,22 @@
-venv
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# Virtualenvs
+venv/
+.venv/
+
+# Editors
+.idea/
+*.iml
+.vscode/
+
+# Tool input and output folders
 images-reference/*
 images-new/*
 images-diff/*
-*.iml
-.idea
+output/
