@@ -11,10 +11,11 @@ at every position that changed. Pairs with no difference produce no file.
 
 Two modes:
 
-- `strict` (default) marks every pixel whose value differs at all.
-- `relaxed` marks only pixels whose grayscale difference is at or above
+- `strict` (default) marks every pixel whose grayscale difference is above
+  zero. See Limitations for the one-level color changes this misses.
+- `relaxed` marks only pixels whose grayscale difference is above
   `--threshold` (default 30), then removes isolated marks with a 3x3
-  morphological opening.
+  morphological opening. A difference equal to the threshold is not marked.
 
 ## Requirements
 
@@ -74,7 +75,7 @@ python -m pytest
 ```
 
 The tests generate small images with Pillow in a temporary folder and check
-the diff output.
+the diff output. One test runs this example and checks the 332 black pixels.
 
 ## Behavior for missing files and size mismatches
 
