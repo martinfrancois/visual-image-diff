@@ -66,8 +66,15 @@ Diff saved to output/diff/diff_card.png
 circle was and where it is now, and white everywhere else.
 `only-in-reference.png` produces no message.
 
-Run the tests with `python -m pytest`. They generate small images with Pillow
-in a temporary folder and check the diff output.
+To run the tests, install the test dependencies and run pytest:
+
+```bash
+python -m pip install -r requirements-test.txt
+python -m pytest
+```
+
+The tests generate small images with Pillow in a temporary folder and check
+the diff output.
 
 ## Behavior for missing files and size mismatches
 

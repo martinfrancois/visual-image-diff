@@ -20,8 +20,8 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: requirements.txt
-      - run: python -m pip install -r requirements.txt -e .
+          cache-dependency-path: requirements*.txt
+      - run: python -m pip install -r requirements-test.txt -e .
       - run: visual-image-diff --help
       - run: python -m pytest
       - name: Run the documented synthetic example
