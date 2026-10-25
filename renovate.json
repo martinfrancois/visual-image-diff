@@ -49,15 +49,6 @@
       "automerge": true
     },
     {
-      "matchManagers": [
-        "pep621"
-      ],
-      "matchDepTypes": [
-        "build-system.requires"
-      ],
-      "rangeStrategy": "bump"
-    },
-    {
       "description": "Major updates require human review.",
       "matchUpdateTypes": [
         "major"

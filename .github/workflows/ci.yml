@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
-      # The oldest version requires-python in pyproject.toml allows.
+      # Check the oldest supported Python version.
       OLDEST_PYTHON: "3.10"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -27,16 +27,16 @@ jobs:
             3.12
           cache: pip
           cache-dependency-path: requirements*.txt
-      - run: python -m pip install -r requirements-test.txt -e .
-      - run: visual-image-diff --help
+      - run: python -m pip install -r requirements-test.txt
+      - run: python app.py --help
       - run: python -m pytest
       - name: Run the tests on the oldest supported Python
         run: |
           venv="$RUNNER_TEMP/oldest-python"
           "python$OLDEST_PYTHON" -m venv "$venv"
-          "$venv/bin/python" -m pip install -r requirements-test.txt -e .
+          "$venv/bin/python" -m pip install -r requirements-test.txt
           "$venv/bin/python" -m pytest
       - name: Run the documented synthetic example
-        run: visual-image-diff examples/reference examples/new output/diff
+        run: python app.py examples/reference examples/new output/diff
       - name: Check the example wrote exactly one diff image
         run: test "$(ls output/diff)" = diff_card.png
