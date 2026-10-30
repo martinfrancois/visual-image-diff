@@ -128,3 +128,28 @@ def test_readme_example_writes_one_diff_with_332_black_pixels(tmp_path):
     diff = read_gray(out / "diff_card.png")
     assert diff.size == (96, 64)
     assert diff.tobytes().count(0) == 332
+
+
+@pytest.mark.parametrize("channel", [0, 1, 2], ids=["red", "green", "blue"])
+def test_strict_mode_detects_one_level_change_in_each_channel(pair, channel):
+    color = list(BACKGROUND)
+    color[channel] -= 1
+    write_image(pair.a)
+    write_image(pair.b, patch=((4, 4, 5, 5), tuple(color)))
+
+    compare(pair, mode="strict", threshold_value=255)
+
+    diff = read_gray(pair.out)
+    assert diff.getpixel((4, 4)) == 0
+    assert diff.tobytes().count(0) == 1
+    assert diff.tobytes().count(255) == 32 * 32 - 1
+
+
+def test_relaxed_threshold_keeps_grayscale_weighting(pair):
+    write_image(pair.a)
+    # A 100-level blue change has grayscale difference 11, below threshold 30.
+    write_image(pair.b, patch=((4, 4, 12, 12), (200, 200, 100)))
+
+    compare(pair, mode="relaxed", threshold_value=THRESHOLD)
+
+    assert not pair.out.exists()
