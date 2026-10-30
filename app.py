@@ -7,14 +7,14 @@ def compare_images(image_path1, image_path2, diff_path, threshold_value=30, mode
     Compare two images and save a binary diff image that only shows differences.
 
     The output image has a white background with black pixels for differences.
-    In strict mode, every minor difference is reported; in relaxed mode, small differences may be filtered out.
+    In strict mode, every RGB channel difference is reported; in relaxed mode, small differences may be filtered out.
 
     Args:
         image_path1 (str): Path to the first image.
         image_path2 (str): Path to the second image.
         diff_path (str): Path to save the diff image.
         threshold_value (int): Threshold for relaxed mode. Ignored in strict mode.
-        mode (str): "strict" (default) or "relaxed". Strict mode reports every difference.
+        mode (str): "strict" (default) or "relaxed". Strict mode reports every RGB channel difference.
     """
     # Load the images
     imgA = cv2.imread(image_path1)
@@ -32,15 +32,15 @@ def compare_images(image_path1, image_path2, diff_path, threshold_value=30, mode
         print(f"Skipping {image_path1} and {image_path2} due to different dimensions.")
         return
 
-    # Compute the absolute difference and convert to grayscale
     diff = cv2.absdiff(imgA, imgB)
-    gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
 
     if mode == "strict":
-        # Strict mode: report every minor difference by using a threshold of 0
-        _, diff_mask = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV)
+        # Grayscale rounding loses small channel changes, so compare channels directly.
+        channel_difference = diff.max(axis=2)
+        _, diff_mask = cv2.threshold(channel_difference, 0, 255, cv2.THRESH_BINARY_INV)
     else:
         # Relaxed mode: ignore differences below the given threshold and apply morphological opening to reduce noise
+        gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
         _, diff_mask = cv2.threshold(gray, threshold_value, 255, cv2.THRESH_BINARY_INV)
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
         diff_mask = cv2.morphologyEx(diff_mask, cv2.MORPH_OPEN, kernel, iterations=1)
@@ -64,7 +64,7 @@ def process_folders(folder1, folder2, output_folder, threshold_value=30, mode="s
         folder2 (str): Path to the second image folder.
         output_folder (str): Folder to save diff images.
         threshold_value (int): Difference threshold for relaxed mode.
-        mode (str): "strict" (default) or "relaxed". Strict mode reports every minor difference.
+        mode (str): "strict" (default) or "relaxed". Strict mode reports every RGB channel difference.
     """
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
@@ -101,7 +101,7 @@ def main():
     parser.add_argument("--threshold", type=int, default=30,
                         help="Threshold for difference detection in relaxed mode (default: 30). Ignored in strict mode.")
     parser.add_argument("--mode", choices=["relaxed", "strict"], default="strict",
-                        help="Comparison mode: 'strict' (default, reports every difference) or 'relaxed' (filters small differences)")
+                        help="Comparison mode: 'strict' (default, reports every RGB channel difference) or 'relaxed' (filters small differences)")
     args = parser.parse_args()
 
     process_folders(args.folder1, args.folder2, args.output_folder, args.threshold, args.mode)
