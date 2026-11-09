@@ -1,0 +1,31 @@
+name: Bug report
+description: A diff image is wrong, or the tool doesn't work as documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Leave out private images, private paths and personal data, also from logs and screenshots. A small pair of invented images that shows the problem helps most.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The `app.py` command you ran, including `--mode` and `--threshold`, and a small image pair that shows the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Commit, Python and OpenCV versions, operating system, and anything else that matters here.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output or logs
+      render: text
